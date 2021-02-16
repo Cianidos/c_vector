@@ -30,12 +30,21 @@
     <ClCompile Include="c_macro_vector.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="alg_vector.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c_macro_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="c_any_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alg_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algebra.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

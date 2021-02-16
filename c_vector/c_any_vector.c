@@ -111,11 +111,7 @@ void reserve_any_vector
 	if (new_size > this->_capacity)
 	{
 		this->_capacity = new_size;
-		struct any_vector* tmp = init_any_vector_ptr(this->_capacity, this->_element_size);
-		data_copy_any_vector(this, tmp);
-		free(this->data);
-		this->data = tmp->data;
-		free(tmp);
+		this->data = realloc(this->data, this->_capacity * this->_element_size);
 	}
 }
 
