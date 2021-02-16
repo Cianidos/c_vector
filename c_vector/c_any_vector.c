@@ -8,7 +8,7 @@ void copy_one_element
 (void* from, void* to, const size_t size_of_element);
 
 int8_t* data_alloc_any_vector
-(size_t size_of_data, size_t size_of_element);
+(const size_t size_of_data, const size_t size_of_element);
 
 void data_copy_any_vector
 (const struct any_vector* const from, struct any_vector* to);
@@ -22,6 +22,9 @@ void* at_any_vector
 
 void* push_back_any_vector
 (struct any_vector* const this);
+
+void reserve_any_vector
+(struct any_vector* const this, const size_t new_size);
 
 
 struct any_vector* copy_any_vector
@@ -45,19 +48,14 @@ void copy_one_element
 void data_double_capacity_any_vector
 (struct any_vector* const this)
 {
-	if (this->capacity == 0)
-		this->capacity = 1;
+	if (this->_capacity == 0)
+		this->_capacity = 1;
 
-	this->capacity *= 2;
-	struct any_vector* tmp = init_any_vector_ptr(this->capacity, this->_element_size);
-	data_copy_any_vector(this, tmp);
-	free(this->data);
-	this->data = tmp->data;
-	free(tmp);
+	this->reserve(this, this->_capacity * 2);
 }
 
 int8_t* data_alloc_any_vector
-(size_t size_of_data, size_t size_of_element)
+(const size_t size_of_data, const size_t size_of_element)
 {
 	if (size_of_data == 0) return NULL;
 	return (int8_t*) malloc(size_of_data * size_of_element);
@@ -85,7 +83,7 @@ void* at_any_vector
 void* push_back_any_vector
 (struct any_vector* const this)
 {
-	if (this->size >= this->capacity)
+	if (this->size >= this->_capacity)
 	{
 		data_double_capacity_any_vector(this);
 	}
@@ -93,19 +91,34 @@ void* push_back_any_vector
 	return this->at(this, this->size - 1);
 }
 
+void reserve_any_vector
+(struct any_vector* const this, const size_t new_size)
+{
+	if (new_size > this->_capacity)
+	{
+		this->_capacity = new_size;
+		struct any_vector* tmp = init_any_vector_ptr(this->_capacity, this->_element_size);
+		data_copy_any_vector(this, tmp);
+		free(this->data);
+		this->data = tmp->data;
+		free(tmp);
+	}
+}
+
 
 struct any_vector* copy_any_vector
 (const struct any_vector* const this)
 {
-	struct any_vector* res = init_any_vector_ptr(this->capacity, this->_element_size);
+	struct any_vector* res = init_any_vector_ptr(this->_capacity, this->_element_size);
 	res->size = this->size;
 	data_copy_any_vector(this, res);
 	return res;
 }
+
+
 /*
  * public definition section
  */
-
 
 struct any_vector init_any_vector
 (size_t size_of_vector, size_t size_of_one_element)
@@ -113,15 +126,16 @@ struct any_vector init_any_vector
 	struct any_vector result;
 	result.size = size_of_vector;
 	result._element_size = size_of_one_element;
-	result.capacity = size_of_vector;
+	result._capacity = size_of_vector;
 	result.data = 
 		data_alloc_any_vector(
-			result.capacity, 
+			result._capacity, 
 			result._element_size
 		);
 	result.at = &at_any_vector;
-	result.copy = &copy_any_vector;
 	result.push_back = &push_back_any_vector;
+	result.reserve = &reserve_any_vector;
+	result.copy = &copy_any_vector;
 	return result;
 }
 
@@ -130,11 +144,18 @@ struct any_vector* init_any_vector_ptr
 {
 	struct any_vector* res = 
 		(struct any_vector*) malloc(sizeof(struct any_vector));
-	*res = init_any_vector(size_of_vector, size_of_one_element);
+	if (res != NULL)
+		*res = init_any_vector(size_of_vector, size_of_one_element);
 	return res;
 }
 
 void delete_any_vector
+(struct any_vector vect)
+{
+	free(vect.data);
+}
+
+void delete_any_vector_ptr
 (struct any_vector* vect)
 {
 	free(vect->data);
@@ -146,8 +167,9 @@ void delete_any_vector
  * tests
  */
 
-#include <assert.h>
+#ifndef NDEBUG
 
+#include <assert.h>
 
 void test_any_vector_at(void)
 {
@@ -162,17 +184,22 @@ void test_any_vector_at(void)
 		assert(*(int*)v.at(&v, i) == expected[i]);
 	}
 	assert(v.at(&v, 10) == NULL);
+
+	delete_any_vector(v);
 }
 
 void test_any_vector_init(void)
 {
 	struct any_vector a = init_any_vector(20,sizeof(int));
 	assert(a.size == 20);
-	assert(a.capacity == 20);
+	assert(a._capacity == 20);
 
 	struct any_vector* b = init_any_vector_ptr(20, sizeof(int));
 	assert(b->size == 20);
-	assert(b->capacity == 20);
+	assert(b->_capacity == 20);
+
+	delete_any_vector(a);
+	delete_any_vector_ptr(b);
 }
 
 void test_any_vector_push_back(void)
@@ -194,6 +221,8 @@ void test_any_vector_push_back(void)
 	assert(*(int *)v.at(&v, 2) == 100);
 	assert(*(int *)v.at(&v, 3) == 1000);
 	assert(*(int *)v.at(&v, 4) == 10000);
+
+	delete_any_vector(v);
 }
 
 void test_any_vector_copy(void)
@@ -209,12 +238,15 @@ void test_any_vector_copy(void)
 
 	assert(v.data != v2->data);
 	assert(v.size == v2->size);
-	assert(v.capacity == v2->capacity);
+	assert(v._capacity == v2->_capacity);
 
 	for (int i = 0; i < 5; ++i)
 	{
 		assert(*(int *)v.at(&v, i) == *(int *)v2->at(v2, i));
 	}
+
+	delete_any_vector(v);
+	delete_any_vector_ptr(v2);
 }
 
 void test_any_vector(void)
@@ -224,3 +256,9 @@ void test_any_vector(void)
 	test_any_vector_push_back();
 	test_any_vector_copy();
 }
+#else
+void test_any_vector(void)
+{
+}
+#endif
+
