@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #include <stdlib.h>
 
 struct any_vector
@@ -7,7 +8,7 @@ struct any_vector
 	size_t size;
 	size_t capacity;
 
-	char* data;
+	int8_t* data;
 
 	void* (*at)(const struct any_vector* const this, const size_t index);
 	void* (*push_back)(struct any_vector* const this);

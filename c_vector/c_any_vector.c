@@ -7,7 +7,7 @@
 void copy_one_element
 (void* from, void* to, const size_t size_of_element);
 
-char* data_alloc_any_vector
+int8_t* data_alloc_any_vector
 (size_t size_of_data, size_t size_of_element);
 
 void data_copy_any_vector
@@ -34,8 +34,8 @@ struct any_vector* copy_any_vector
 void copy_one_element
 (void* from, void* to, const size_t size_of_element)
 {
-	char* a = (char*)from;
-	char* b = (char*)to;
+	int8_t* a = (int8_t*)from;
+	int8_t* b = (int8_t*)to;
 	for (size_t j = 0; j < size_of_element; ++j)
 	{
 		b[j] = a[j];
@@ -56,11 +56,11 @@ void data_double_capacity_any_vector
 	free(tmp);
 }
 
-char* data_alloc_any_vector
+int8_t* data_alloc_any_vector
 (size_t size_of_data, size_t size_of_element)
 {
 	if (size_of_data == 0) return NULL;
-	return (char*) malloc(size_of_data * size_of_element);
+	return (int8_t*) malloc(size_of_data * size_of_element);
 }
 
 void data_copy_any_vector
