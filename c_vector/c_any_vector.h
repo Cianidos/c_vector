@@ -54,6 +54,26 @@ struct any_vector
 	 *  returns pointer to copy of this vector
 	 */
 	struct any_vector* (*copy)(const struct any_vector* const this);
+
+	/*
+	 *	returns pointer to first element 
+	 */
+	void* (*begin)(const struct any_vector* const this);
+
+	/*
+	 *  returns pointer to element after last
+	 */
+	void* (*end)(const struct any_vector* const this);
+
+	/*
+	 *  returns pointer to first element
+	 */
+	void* (*front)(const struct any_vector* const this);
+
+	/*
+	 *  returns pointer to first element
+	 */
+	void* (*back)(const struct any_vector* const this);
 };
 
 /*

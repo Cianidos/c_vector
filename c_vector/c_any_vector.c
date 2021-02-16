@@ -30,6 +30,20 @@ void reserve_any_vector
 struct any_vector* copy_any_vector
 (const struct any_vector* const this);
 
+
+void* begin_any_vector
+(const struct any_vector* const this);
+
+void* end_any_vector
+(const struct any_vector* const this);
+
+void* front_any_vector
+(const struct any_vector* const this);
+
+void* back_any_vector
+(const struct any_vector* const this);
+
+
 /*
  *private definition section
  */
@@ -105,6 +119,30 @@ void reserve_any_vector
 	}
 }
 
+void* begin_any_vector(const struct any_vector* const this)
+{
+	return this->begin(this);
+}
+
+void* end_any_vector(const struct any_vector* const this)
+{
+	return ((char*)this->back(this) + this->_element_size);
+}
+
+void* front_any_vector(const struct any_vector* const this)
+{
+	if (this->data)
+		return this->data;
+	return NULL;
+}
+
+void* back_any_vector(const struct any_vector* const this)
+{
+	if (this->data)
+		return this->at(this, this->size - 1);
+	return NULL;
+}
+
 
 struct any_vector* copy_any_vector
 (const struct any_vector* const this)
@@ -120,6 +158,9 @@ struct any_vector* copy_any_vector
  * public definition section
  */
 
+
+#define ADD_METHOD(OBJ, NAME) OBJ.NAME = NAME##_##any_vector
+
 struct any_vector init_any_vector
 (size_t size_of_vector, size_t size_of_one_element)
 {
@@ -132,10 +173,16 @@ struct any_vector init_any_vector
 			result._capacity, 
 			result._element_size
 		);
-	result.at = &at_any_vector;
-	result.push_back = &push_back_any_vector;
-	result.reserve = &reserve_any_vector;
-	result.copy = &copy_any_vector;
+
+	ADD_METHOD(result, at);
+	ADD_METHOD(result, push_back);
+	ADD_METHOD(result, copy);
+	ADD_METHOD(result, reserve);
+	ADD_METHOD(result, begin);
+	ADD_METHOD(result, end);
+	ADD_METHOD(result, front);
+	ADD_METHOD(result, back);
+
 	return result;
 }
 
