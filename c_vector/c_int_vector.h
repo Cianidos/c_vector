@@ -27,4 +27,4 @@ void delete_int_vector(struct int_vector* vect);
  * tests
  */
 
-void test_int_vector(void);
+extern void test_int_vector(void);

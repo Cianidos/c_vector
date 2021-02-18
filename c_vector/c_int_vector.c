@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "c_int_vector.h"
 
 
@@ -112,7 +114,8 @@ struct int_vector* init_int_vector_ptr
 {
 	struct int_vector* res = 
 		(struct int_vector*) malloc(sizeof(struct int_vector));
-	*res = init_int_vector(size);
+	if(res)
+		*res = init_int_vector(size);
 	return res;
 }
 
@@ -153,6 +156,7 @@ void test_int_vector_init(void)
 	struct int_vector* b = init_int_vector_ptr(20);
 	assert(b->size == 20);
 	assert(b->capacity == 20);
+	free(b);
 }
 
 void test_int_vector_push_back(void)
@@ -195,6 +199,7 @@ void test_int_vector_copy(void)
 	{
 		assert(*v.at(&v, i) == *v2->at(v2, i));
 	}
+	free(v2);
 }
 
 void test_int_vector(void)

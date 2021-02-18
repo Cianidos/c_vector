@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "alg_vector.h"
 
 #include <assert.h>
@@ -80,11 +82,14 @@ void* elements_sum_alg_vector
 	const struct any_vector* v = &this->vector;
 
 	void* res = malloc(v->_element_size);
+	if (!res)
+		return res;
 
 	if (v->size == 1)
 	{
 		memcpy(res, v->at(v, 0), v->_element_size);
-	} else
+	}
+	else
 	{
 		this->alg.sum(v->at(v, 0), v->at(v, 1), res);
 		for (size_t i = 2; i < v->size; ++i)
@@ -101,7 +106,10 @@ struct alg_vector* sum_alg_vector
 {
 	assert(this->vector.size == other->vector.size);
 	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
-	struct any_vector* t = &this->vector, * o = &other->vector, * r = &res->vector;
+	if (!res)
+		return res;
+	const struct any_vector* t = &this->vector, * o = &other->vector;
+	struct any_vector* r = &res->vector;
 
 	for (size_t i = 0; i < t->size; ++i)
 	{
@@ -115,6 +123,8 @@ void* dot_alg_vector
 {
 	assert(this->vector.size == other->vector.size);
 	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
+	if (!res)
+		return res;
 	const struct any_vector* t = &this->vector, * o = &other->vector;
 	struct any_vector* r = &res->vector;
 
@@ -132,6 +142,8 @@ struct alg_vector* copy_alg_vector
 (const struct alg_vector* const this)
 {
 	struct alg_vector* res = init_alg_vector_ptr(0, this->alg);
+	if (!res)
+		return res;
 	delete_any_vector(this->vector);
 	struct any_vector* tmp = this->vector.copy(&this->vector);
 	res->vector = *tmp;

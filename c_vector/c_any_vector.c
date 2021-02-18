@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "c_any_vector.h"
 
 /*
@@ -111,7 +113,9 @@ void reserve_any_vector
 	if (new_size > this->_capacity)
 	{
 		this->_capacity = new_size;
-		this->data = realloc(this->data, this->_capacity * this->_element_size);
+		void* tmp = realloc((void *)this->data, this->_capacity * this->_element_size);
+		if (tmp)
+			this->data = (int8_t*)tmp;
 	}
 }
 

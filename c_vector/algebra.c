@@ -1,16 +1,18 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "algebra.h"
 
 #define DEF_STD_ALGEBRA_OF(TYPE) \
 \
-sum_for_std_types_##TYPE(const void* a, const void* b, void* res)\
+void sum_for_std_types_##TYPE(const void* a, const void* b, void* res)\
 {\
 	*(TYPE *)res = (*(const TYPE*)a + *(const TYPE*)b);\
 }\
-mul_for_std_types_##TYPE(const void* a, const void* b, void* res)\
+void mul_for_std_types_##TYPE(const void* a, const void* b, void* res)\
 {\
 	*(TYPE *)res = (*(const TYPE*)a * *(const TYPE*)b);\
 }\
-minus_for_std_types_##TYPE(const void* a, void* res)\
+void minus_for_std_types_##TYPE(const void* a, void* res)\
 {\
 	*(TYPE *)res = - *(const TYPE*)a;\
 }\

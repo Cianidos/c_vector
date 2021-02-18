@@ -1,5 +1,8 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "c_macro_vector.h"
 
+#ifndef NDEBUG
 DEFINE_VECTOR_OF(int)
 
 /*
@@ -32,6 +35,7 @@ void test_vector_int_init(void)
 	struct vector_int* b = init_vector_int_ptr(20);
 	assert(b->size == 20);
 	assert(b->capacity == 20);
+	free(b);
 }
 
 void test_vector_int_push_back(void)
@@ -74,6 +78,7 @@ void test_vector_int_copy(void)
 	{
 		assert(*v.at(&v, i) == *v2->at(v2, i));
 	}
+	free(v2);
 }
 
 void test_macro_vector(void)
@@ -83,3 +88,9 @@ void test_macro_vector(void)
 	test_vector_int_push_back();
 	test_vector_int_copy();
 }
+#else
+
+test_macro_vector(void)
+
+#endif
+
