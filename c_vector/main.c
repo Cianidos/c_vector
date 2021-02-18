@@ -4,14 +4,16 @@
 #include "c_macro_vector.h"
 #include "c_void_vector.h"
 #include "alg_vector.h"
+#include "functional_extention_for_void_vector.h"
 
 
 int main(void)
 {
-	test_int_vector_();
+	test_int_vector();
 	test_macro_vector();
 	test_void_vector();
 	test_alg_vector();
+	test_functional();
 	
 	return 0;
 }

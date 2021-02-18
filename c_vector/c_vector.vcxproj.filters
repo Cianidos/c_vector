@@ -36,6 +36,9 @@
     <ClCompile Include="c_void_vector.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="functional_extention_for_void_vector.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c_macro_vector.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="c_void_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="functional_extention_for_void_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

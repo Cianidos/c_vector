@@ -86,8 +86,8 @@ struct void_vector
  * public declaration section
  */
 
-#define NEW_VECTOR_OF(TYPE, SIZE) (init_void_vector((SIZE), sizeof((TYPE))))
-#define NEW_VECTOR_PTR_OF(TYPE, SIZE) (init_void_vector_ptr((SIZE), sizeof((TYPE))))
+#define NEW_VECTOR_OF(NAME, TYPE, SIZE) struct void_vector NAME = init_void_vector((SIZE), sizeof(TYPE))
+#define NEW_VECTOR_PTR_OF(NAME, TYPE, SIZE) struct void_vector* NAME = init_void_vector_ptr((SIZE), sizeof(TYPE))
 
 struct void_vector init_void_vector(size_t size_of_vector, size_t size_of_one_element);
 struct void_vector* init_void_vector_ptr(size_t size_of_vector, size_t size_of_one_element);
