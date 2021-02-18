@@ -9,6 +9,9 @@ struct alg_vector
 	struct algebra alg;
 	struct any_vector vector;
 
+	void* (*at)
+	(const struct alg_vector * const this, size_t index);
+
 	void* (*elements_sum)
 	(const struct alg_vector * const this);
 
@@ -31,3 +34,9 @@ void delete_alg_vector(struct alg_vector vect);
 
 struct alg_vector* init_alg_vector_ptr(size_t dimension, struct algebra algebra);
 void delete_alg_vector_ptr(struct alg_vector* vect);
+
+/*
+ *  tests
+ */
+
+void test_alg_vector(void);

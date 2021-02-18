@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="algebra.c" />
     <ClCompile Include="alg_vector.c" />
     <ClCompile Include="c_int_vector.h" />
     <ClCompile Include="c_int_vector.c" />

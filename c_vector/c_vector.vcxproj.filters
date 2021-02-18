@@ -33,6 +33,9 @@
     <ClCompile Include="alg_vector.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="algebra.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c_macro_vector.h">
