@@ -36,7 +36,7 @@ struct alg_vector init_alg_vector(size_t dimension, struct algebra algebra)
 {
 	struct alg_vector result;
 	result.alg = algebra;
-	result.vector = init_any_vector(dimension, algebra.size_of_element);
+	result.vector = init_void_vector(dimension, algebra.size_of_element);
 	ADD_METHOD(result, at);
 	ADD_METHOD(result, elements_sum);
 	ADD_METHOD(result, sum);
@@ -47,7 +47,7 @@ struct alg_vector init_alg_vector(size_t dimension, struct algebra algebra)
 
 void delete_alg_vector(struct alg_vector vect)
 {
-	delete_any_vector(vect.vector);
+	delete_void_vector(vect.vector);
 }
 
 struct alg_vector* init_alg_vector_ptr(size_t dimension, struct algebra algebra)
@@ -62,7 +62,7 @@ struct alg_vector* init_alg_vector_ptr(size_t dimension, struct algebra algebra)
 
 void delete_alg_vector_ptr(struct alg_vector* vect)
 {
-	delete_any_vector(vect->vector);
+	delete_void_vector(vect->vector);
 	free(vect);
 }
 
@@ -79,7 +79,7 @@ void* at_alg_vector(const struct alg_vector* const this, size_t index)
 void* elements_sum_alg_vector
 (const struct alg_vector* const this)
 {
-	const struct any_vector* v = &this->vector;
+	const struct void_vector* v = &this->vector;
 
 	void* res = malloc(v->_element_size);
 	if (!res)
@@ -108,8 +108,8 @@ struct alg_vector* sum_alg_vector
 	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
 	if (!res)
 		return res;
-	const struct any_vector* t = &this->vector, * o = &other->vector;
-	struct any_vector* r = &res->vector;
+	const struct void_vector* t = &this->vector, * o = &other->vector;
+	struct void_vector* r = &res->vector;
 
 	for (size_t i = 0; i < t->size; ++i)
 	{
@@ -125,8 +125,8 @@ void* dot_alg_vector
 	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
 	if (!res)
 		return res;
-	const struct any_vector* t = &this->vector, * o = &other->vector;
-	struct any_vector* r = &res->vector;
+	const struct void_vector* t = &this->vector, * o = &other->vector;
+	struct void_vector* r = &res->vector;
 
 	for (size_t i = 0; i < t->size; ++i)
 	{
@@ -144,8 +144,8 @@ struct alg_vector* copy_alg_vector
 	struct alg_vector* res = init_alg_vector_ptr(0, this->alg);
 	if (!res)
 		return res;
-	delete_any_vector(this->vector);
-	struct any_vector* tmp = this->vector.copy(&this->vector);
+	delete_void_vector(this->vector);
+	struct void_vector* tmp = this->vector.copy(&this->vector);
 	res->vector = *tmp;
 	free(tmp);
 	return res;

@@ -1,13 +1,13 @@
 #pragma once
 #include <stddef.h>
-#include "c_any_vector.h"
+#include "c_void_vector.h"
 #include "algebra.h"
 
 
 struct alg_vector
 {
 	struct algebra alg;
-	struct any_vector vector;
+	struct void_vector vector;
 
 	void* (*at)
 	(const struct alg_vector * const this, size_t index);

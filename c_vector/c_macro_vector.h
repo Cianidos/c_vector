@@ -2,6 +2,10 @@
 
 #include <stdlib.h>
 
+/*
+ *	macros that define vector typed for @TYPE
+ *	with name "vector_@TYPE"
+ */
 #define DEFINE_VECTOR_OF(TYPE) \
 \
 \

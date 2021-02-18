@@ -151,7 +151,7 @@
     <ClCompile Include="alg_vector.c" />
     <ClCompile Include="c_int_vector.h" />
     <ClCompile Include="c_int_vector.c" />
-    <ClCompile Include="c_any_vector.c" />
+    <ClCompile Include="c_void_vector.c" />
     <ClCompile Include="c_macro_vector.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
@@ -159,7 +159,7 @@
     <ClInclude Include="algebra.h" />
     <ClInclude Include="alg_vector.h" />
     <ClInclude Include="c_macro_vector.h" />
-    <ClInclude Include="c_any_vector.h" />
+    <ClInclude Include="c_void_vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

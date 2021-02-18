@@ -1,6 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
-#include "c_any_vector.h"
+#include "c_void_vector.h"
 
 /*
  * private declaration section
@@ -9,41 +9,41 @@
 void copy_one_element
 (void* from, void* to, const size_t size_of_element);
 
-int8_t* data_alloc_any_vector
+int8_t* data_alloc_void_vector
 (const size_t size_of_data, const size_t size_of_element);
 
-void data_copy_any_vector
-(const struct any_vector* const from, struct any_vector* to);
+void data_copy_void_vector
+(const struct void_vector* const from, struct void_vector* to);
 
-void data_double_capacity_any_vector
-(struct any_vector* const this);
-
-
-void* at_any_vector
-(const struct any_vector* const this, const size_t index);
-
-void* push_back_any_vector
-(struct any_vector* const this);
-
-void reserve_any_vector
-(struct any_vector* const this, const size_t new_size);
+void data_double_capacity_void_vector
+(struct void_vector* const this);
 
 
-struct any_vector* copy_any_vector
-(const struct any_vector* const this);
+void* at_void_vector
+(const struct void_vector* const this, const size_t index);
+
+void* push_back_void_vector
+(struct void_vector* const this);
+
+void reserve_void_vector
+(struct void_vector* const this, const size_t new_size);
 
 
-void* begin_any_vector
-(const struct any_vector* const this);
+struct void_vector* copy_void_vector
+(const struct void_vector* const this);
 
-void* end_any_vector
-(const struct any_vector* const this);
 
-void* front_any_vector
-(const struct any_vector* const this);
+void* begin_void_vector
+(const struct void_vector* const this);
 
-void* back_any_vector
-(const struct any_vector* const this);
+void* end_void_vector
+(const struct void_vector* const this);
+
+void* front_void_vector
+(const struct void_vector* const this);
+
+void* back_void_vector
+(const struct void_vector* const this);
 
 
 /*
@@ -61,8 +61,8 @@ void copy_one_element
 	}
 }
 
-void data_double_capacity_any_vector
-(struct any_vector* const this)
+void data_double_capacity_void_vector
+(struct void_vector* const this)
 {
 	if (this->_capacity == 0)
 		this->_capacity = 1;
@@ -70,15 +70,15 @@ void data_double_capacity_any_vector
 	this->reserve(this, this->_capacity * 2);
 }
 
-int8_t* data_alloc_any_vector
+int8_t* data_alloc_void_vector
 (const size_t size_of_data, const size_t size_of_element)
 {
 	if (size_of_data == 0) return NULL;
 	return (int8_t*) malloc(size_of_data * size_of_element);
 }
 
-void data_copy_any_vector
-(const struct any_vector* const from, struct any_vector* to)
+void data_copy_void_vector
+(const struct void_vector* const from, struct void_vector* to)
 {
 	for (size_t i = 0; i < from->size; ++i)
 	{
@@ -86,8 +86,8 @@ void data_copy_any_vector
 	}	
 }
 
-void* at_any_vector
-(const struct any_vector * const this, const size_t index)
+void* at_void_vector
+(const struct void_vector * const this, const size_t index)
 {
 	if (index >= this->size)
 	{
@@ -96,19 +96,19 @@ void* at_any_vector
 	return &this->data[index * this->_element_size];
 }
 
-void* push_back_any_vector
-(struct any_vector* const this)
+void* push_back_void_vector
+(struct void_vector* const this)
 {
 	if (this->size >= this->_capacity)
 	{
-		data_double_capacity_any_vector(this);
+		data_double_capacity_void_vector(this);
 	}
 	++(this->size);
 	return this->at(this, this->size - 1);
 }
 
-void reserve_any_vector
-(struct any_vector* const this, const size_t new_size)
+void reserve_void_vector
+(struct void_vector* const this, const size_t new_size)
 {
 	if (new_size > this->_capacity)
 	{
@@ -119,24 +119,24 @@ void reserve_any_vector
 	}
 }
 
-void* begin_any_vector(const struct any_vector* const this)
+void* begin_void_vector(const struct void_vector* const this)
 {
 	return this->begin(this);
 }
 
-void* end_any_vector(const struct any_vector* const this)
+void* end_void_vector(const struct void_vector* const this)
 {
 	return ((char*)this->back(this) + this->_element_size);
 }
 
-void* front_any_vector(const struct any_vector* const this)
+void* front_void_vector(const struct void_vector* const this)
 {
 	if (this->data)
 		return this->data;
 	return NULL;
 }
 
-void* back_any_vector(const struct any_vector* const this)
+void* back_void_vector(const struct void_vector* const this)
 {
 	if (this->data)
 		return this->at(this, this->size - 1);
@@ -144,12 +144,12 @@ void* back_any_vector(const struct any_vector* const this)
 }
 
 
-struct any_vector* copy_any_vector
-(const struct any_vector* const this)
+struct void_vector* copy_void_vector
+(const struct void_vector* const this)
 {
-	struct any_vector* res = init_any_vector_ptr(this->_capacity, this->_element_size);
+	struct void_vector* res = init_void_vector_ptr(this->_capacity, this->_element_size);
 	res->size = this->size;
-	data_copy_any_vector(this, res);
+	data_copy_void_vector(this, res);
 	return res;
 }
 
@@ -159,17 +159,17 @@ struct any_vector* copy_any_vector
  */
 
 
-#define ADD_METHOD(OBJ, NAME) OBJ.NAME = NAME##_##any_vector
+#define ADD_METHOD(OBJ, NAME) OBJ.NAME = NAME##_##void_vector
 
-struct any_vector init_any_vector
+struct void_vector init_void_vector
 (size_t size_of_vector, size_t size_of_one_element)
 {
-	struct any_vector result;
+	struct void_vector result;
 	result.size = size_of_vector;
 	result._element_size = size_of_one_element;
 	result._capacity = size_of_vector;
 	result.data = 
-		data_alloc_any_vector(
+		data_alloc_void_vector(
 			result._capacity, 
 			result._element_size
 		);
@@ -186,24 +186,24 @@ struct any_vector init_any_vector
 	return result;
 }
 
-struct any_vector* init_any_vector_ptr
+struct void_vector* init_void_vector_ptr
 (size_t size_of_vector, size_t size_of_one_element)
 {
-	struct any_vector* res = 
-		(struct any_vector*) malloc(sizeof(struct any_vector));
+	struct void_vector* res = 
+		(struct void_vector*) malloc(sizeof(struct void_vector));
 	if (res != NULL)
-		*res = init_any_vector(size_of_vector, size_of_one_element);
+		*res = init_void_vector(size_of_vector, size_of_one_element);
 	return res;
 }
 
-void delete_any_vector
-(struct any_vector vect)
+void delete_void_vector
+(struct void_vector vect)
 {
 	free(vect.data);
 }
 
-void delete_any_vector_ptr
-(struct any_vector* vect)
+void delete_void_vector_ptr
+(struct void_vector* vect)
 {
 	free(vect->data);
 	free(vect);
@@ -218,9 +218,9 @@ void delete_any_vector_ptr
 
 #include <assert.h>
 
-void test_any_vector_at(void)
+void test_void_vector_at(void)
 {
-	struct any_vector v = init_any_vector(5, sizeof(int));
+	struct void_vector v = init_void_vector(5, sizeof(int));
 	int expected[5] = { 1, 3, 2, 4, 5 };
 	for (int i = 0; i < 5; ++i)
 	{
@@ -232,26 +232,26 @@ void test_any_vector_at(void)
 	}
 	assert(v.at(&v, 10) == NULL);
 
-	delete_any_vector(v);
+	delete_void_vector(v);
 }
 
-void test_any_vector_init(void)
+void test_void_vector_init(void)
 {
-	struct any_vector a = init_any_vector(20,sizeof(int));
+	struct void_vector a = init_void_vector(20,sizeof(int));
 	assert(a.size == 20);
 	assert(a._capacity == 20);
 
-	struct any_vector* b = init_any_vector_ptr(20, sizeof(int));
+	struct void_vector* b = init_void_vector_ptr(20, sizeof(int));
 	assert(b->size == 20);
 	assert(b->_capacity == 20);
 
-	delete_any_vector(a);
-	delete_any_vector_ptr(b);
+	delete_void_vector(a);
+	delete_void_vector_ptr(b);
 }
 
-void test_any_vector_push_back(void)
+void test_void_vector_push_back(void)
 {
-	struct any_vector v = init_any_vector(0, sizeof(int));
+	struct void_vector v = init_void_vector(0, sizeof(int));
 	*(int*)v.push_back(&v) = 2;
 	assert(*(int *)v.at(&v, 0) == 2);
 	*(int*)v.push_back(&v) = 7;
@@ -269,19 +269,19 @@ void test_any_vector_push_back(void)
 	assert(*(int *)v.at(&v, 3) == 1000);
 	assert(*(int *)v.at(&v, 4) == 10000);
 
-	delete_any_vector(v);
+	delete_void_vector(v);
 }
 
-void test_any_vector_copy(void)
+void test_void_vector_copy(void)
 {
-	struct any_vector v = init_any_vector(5, sizeof(int));
+	struct void_vector v = init_void_vector(5, sizeof(int));
 	int expected[5] = { 1, 3, 2, 4, 5 };
 	for (int i = 0; i < 5; ++i)
 	{
 		*(int*)v.at(&v, i) = expected[i];
 	}
 
-	struct any_vector* v2 = v.copy(&v);
+	struct void_vector* v2 = v.copy(&v);
 
 	assert(v.data != v2->data);
 	assert(v.size == v2->size);
@@ -292,19 +292,19 @@ void test_any_vector_copy(void)
 		assert(*(int *)v.at(&v, i) == *(int *)v2->at(v2, i));
 	}
 
-	delete_any_vector(v);
-	delete_any_vector_ptr(v2);
+	delete_void_vector(v);
+	delete_void_vector_ptr(v2);
 }
 
-void test_any_vector(void)
+void test_void_vector(void)
 {
-	test_any_vector_at();
-	test_any_vector_init();
-	test_any_vector_push_back();
-	test_any_vector_copy();
+	test_void_vector_at();
+	test_void_vector_init();
+	test_void_vector_push_back();
+	test_void_vector_copy();
 }
 #else
-void test_any_vector(void)
+void test_void_vector(void)
 {
 }
 #endif

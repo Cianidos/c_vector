@@ -202,7 +202,7 @@ void test_int_vector_copy(void)
 	free(v2);
 }
 
-void test_int_vector(void)
+void test_int_vector_(void)
 {
 	test_int_vector_at();
 	test_int_vector_init();
