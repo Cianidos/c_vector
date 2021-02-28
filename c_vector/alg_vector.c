@@ -1,224 +1,246 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "alg_vector.h"
+
 
 #include <assert.h>
 #include <string.h>
 
 
-/*
- *  private declaration
- */
+alg_vector* av_init		(size_t dimension, algebra* alg);
+void		av_free		(alg_vector* av);
 
-void* at_alg_vector
-(const struct alg_vector* const this, size_t index);
+int16_t		av_last_err			(void);
+const char* av_err_to_string		(int16_t err);
+const char* av_last_err_to_string	(int16_t err);
 
-void* elements_sum_alg_vector
-(const struct alg_vector* const this);
+size_t		av_dimension	(const alg_vector* const av);
+void*		av_at			(const alg_vector* const av, size_t index);
 
-struct alg_vector* sum_alg_vector
-(const struct alg_vector* const this, const struct alg_vector* const other);
+void*		av_elements_sum(const alg_vector* const av);
+void*		av_dot			(const alg_vector* const av, const alg_vector* const other);
+alg_vector* av_sum			(const alg_vector* const av, const alg_vector* const other);
 
-void* dot_alg_vector
-(const struct alg_vector* const this, const struct alg_vector* const other);
-
-struct alg_vector* copy_alg_vector
-(const struct alg_vector* const this);
-
-/*
- *  public definition
- */
-
-#define ADD_METHOD(OBJ, NAME) OBJ.NAME = NAME##_alg_vector
+alg_vector* av_copy		(const alg_vector* const av);
 
 
-struct alg_vector init_alg_vector(size_t dimension, struct algebra algebra)
+struct algebraic_vector_global_manager avgm =
 {
-	struct alg_vector result;
-	result.alg = algebra;
-	result.vector = init_void_vector(dimension, algebra.size_of_element);
-	ADD_METHOD(result, at);
-	ADD_METHOD(result, elements_sum);
-	ADD_METHOD(result, sum);
-	ADD_METHOD(result, dot);
-	ADD_METHOD(result, copy);
-	return result;
-}
+	.init = av_init,
+	.free = av_free,
 
-void delete_alg_vector(struct alg_vector vect)
+	.last_err = av_last_err,
+	.err_to_string = av_err_to_string,
+	.last_err_to_string = av_last_err_to_string,
+
+	.dimension = av_dimension,
+	.at = av_at,
+	.elements_sum = av_elements_sum,
+	.dot = av_dot ,
+	.sum = av_sum ,
+	.copy = av_copy,
+};
+
+struct algebraic_vector_global_error avg_err = { .code = 0 };
+
+struct alg_vector
 {
-	delete_void_vector(vect.vector);
-}
+	algebra* alg;
+	c_vector* vec;
+};
 
-struct alg_vector* init_alg_vector_ptr(size_t dimension, struct algebra algebra)
+
+alg_vector* av_init(size_t dimension, algebra* alg)
 {
-	struct alg_vector* res =
-		(struct alg_vector*)malloc(sizeof(struct alg_vector));
-	if (res)
-		*res = init_alg_vector(dimension, algebra);
-	return res;
-}
+	alg_vector* av = (alg_vector*) malloc(sizeof(alg_vector));
 
-
-void delete_alg_vector_ptr(struct alg_vector* vect)
-{
-	delete_void_vector(vect->vector);
-	free(vect);
-}
-
-
-/*
- *  private definition
- */
-
-void* at_alg_vector(const struct alg_vector* const this, size_t index)
-{
-	return this->vector.at(&this->vector, index);
-}
-
-void* elements_sum_alg_vector
-(const struct alg_vector* const this)
-{
-	const struct void_vector* v = &this->vector;
-
-	void* res = malloc(v->_element_size);
-	if (!res)
-		return res;
-
-	if (v->size == 1)
+	if (av == NULL)
 	{
-		memcpy(res, v->at(v, 0), v->_element_size);
+		avg_err.code = 2;
+		return NULL;
+	}
+
+	NEW_C_VECTOR(v, dimension, alg->size_of_element);
+
+	if (v == NULL)
+	{
+		avg_err.code = 2;
+		return NULL;
+	}
+	av->vec = v;
+	av->alg = alg;
+	return av;
+}
+
+void av_free(alg_vector* av)
+{
+
+	vgm.free(av->vec);
+	av->alg = NULL;
+	free(av);
+}
+
+int16_t av_last_err()
+{
+	return avg_err.code;
+}
+
+const char* av_err_to_string(int16_t err)
+{
+	switch (err)
+	{
+	case 0:
+		return "No errors";
+	case 1:
+		return "Out of range access";
+	case 2:
+		return "Unsuccessful allocation of memory";
+	case 3:
+		return "NULL vector received";
+	default:;
+	}
+	return "Incorrect error code";
+}
+
+const char* av_last_err_to_string(int16_t err)
+{
+	return av_err_to_string(av_last_err());
+}
+
+size_t av_dimension(const alg_vector* const av)
+{
+	if (av == NULL)
+	{
+		avg_err.code = 3;
+		return 0;
+	}
+	return vgm.size(av->vec);
+}
+
+void* av_at(const alg_vector* const av, size_t index)
+{
+	if (av == NULL)
+	{
+		avg_err.code = 3;
+		return NULL;
+	}
+	if (index >= vgm.size(av->vec))
+	{
+		avg_err.code = 1;
+		return NULL;
+	}
+	return vgm.at(av->vec, index);
+}
+
+void* av_elements_sum(const alg_vector* const av)
+{
+	if (av == NULL)
+	{
+		avg_err.code = 3;
+		return NULL;
+	}
+	const c_vector* v = av->vec;
+
+	void* res = malloc(av->alg->size_of_element);
+	if (res == NULL)
+	{
+		avg_err.code = 2;
+		return NULL;
+	}
+
+	if (vgm.size(v) == 1)
+	{
+		memcpy(res, vgm.at_const(v, 0), av->alg->size_of_element);
 	}
 	else
 	{
-		this->alg.sum(v->at(v, 0), v->at(v, 1), res);
-		for (size_t i = 2; i < v->size; ++i)
+		av->alg->sum(vgm.at_const(v, 0), vgm.at_const(v, 1), res);
+		for (size_t i = 2; i < vgm.size(v); ++i)
 		{
-			this->alg.sum(v->at(v, i), res, res);
+			av->alg->sum(vgm.at_const(v, i), res, res);
 		}
 	}
-
 	return res;
 }
 
-struct alg_vector* sum_alg_vector
-(const struct alg_vector* const this, const struct alg_vector* const other)
+void* av_dot(const alg_vector* const av, const alg_vector* const other)
 {
-	assert(this->vector.size == other->vector.size);
-	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
-	if (!res)
-		return res;
-	const struct void_vector* t = &this->vector, * o = &other->vector;
-	struct void_vector* r = &res->vector;
-
-	for (size_t i = 0; i < t->size; ++i)
+	if (av == NULL)
 	{
-		this->alg.sum(t->at(t, i), o->at(o, i), r->at(r, i));
+		avg_err.code = 3;
+		return NULL;
 	}
-	return res;
-}
-
-void* dot_alg_vector
-(const struct alg_vector* const this, const struct alg_vector* const other)
-{
-	assert(this->vector.size == other->vector.size);
-	struct alg_vector* res = init_alg_vector_ptr(this->vector.size, this->alg);
-	if (!res)
-		return res;
-	const struct void_vector* t = &this->vector, * o = &other->vector;
-	struct void_vector* r = &res->vector;
-
-	for (size_t i = 0; i < t->size; ++i)
+	if (other == NULL)
 	{
-		this->alg.mul(t->at(t, i), o->at(o, i), r->at(r, i));
+		avg_err.code = 3;
+		return NULL;
+	}
+	assert(vgm.size(av->vec) == vgm.size(other->vec));
+	alg_vector* res = avgm.init(vgm.size(av->vec), av->alg);
+
+	if (res == NULL)
+	{
+		avg_err.code = 2;
+		return NULL;
 	}
 
-	void* real_res = res->elements_sum(res);
-	delete_alg_vector_ptr(res);
+	const c_vector* t = av->vec, * o = other->vec;
+	c_vector* r = res->vec;
+
+	for (size_t i = 0; i < vgm.size(t); ++i)
+	{
+		av->alg->mul(vgm.at_const(t, i), vgm.at_const(o, i), vgm.at(r, i));
+	}
+
+	void* real_res = av_elements_sum(res);
+
+	av_free(res);
 	return real_res;
 }
 
-struct alg_vector* copy_alg_vector
-(const struct alg_vector* const this)
+alg_vector* av_sum(const alg_vector* const av, const alg_vector* const other)
 {
-	struct alg_vector* res = init_alg_vector_ptr(0, this->alg);
-	if (!res)
-		return res;
-	delete_void_vector(this->vector);
-	struct void_vector* tmp = this->vector.copy(&this->vector);
-	res->vector = *tmp;
-	free(tmp);
+	if (av == NULL)
+	{
+		avg_err.code = 3;
+		return NULL;
+	}
+	if (other == NULL)
+	{
+		avg_err.code = 3;
+		return NULL;
+	}
+	assert(vgm.size(av->vec) == vgm.size(other->vec));
+	alg_vector* res = avgm.init(vgm.size(av->vec), av->alg);
+
+	if (res == NULL)
+	{
+		avg_err.code = 2;
+		return NULL;
+	}
+
+	const c_vector* t = av->vec, * o = other->vec;
+	c_vector* r = res->vec;
+
+	for (size_t i = 0; i < vgm.size(t); ++i)
+	{
+		av->alg->sum(vgm.at_const(t, i), vgm.at_const(o, i), vgm.at(r, i));
+	}
 	return res;
 }
 
-
-/*
- *  tests
- */
-#ifndef NDEBUB
-#include <assert.h>
-
-void test_element_sum_dot(void)
+alg_vector* av_copy(const alg_vector* const av)
 {
-	struct alg_vector v = init_alg_vector(3, int_algebra);
-	struct alg_vector v2 = init_alg_vector(3, int_algebra);
-
-	*(int*)v.at(&v, 0) = 5;
-	*(int*)v.at(&v, 1) = 5;
-	*(int*)v.at(&v, 2) = 5;
-	int* v_sum = (int*)v.elements_sum(&v);
-	assert(*v_sum == 15);
-	
-	*(int*)v2.at(&v2, 0) = 1;
-	*(int*)v2.at(&v2, 1) = 2;
-	*(int*)v2.at(&v2, 2) = 3;
-	int* v2_sum = (int*)v2.elements_sum(&v2);
-	assert(*v2_sum == 6);
-
-	struct alg_vector* s_v =  v.sum(&v, &v2);
-
-	assert(*(int*)s_v->at(s_v, 0) == 6);
-	assert(*(int*)s_v->at(s_v, 1) == 7);
-	assert(*(int*)s_v->at(s_v, 2) == 8);
-	
-	struct alg_vector* s_v2 =  v2.sum(&v2, &v);
-
-	assert(*(int*)s_v2->at(s_v2, 0) == 6);
-	assert(*(int*)s_v2->at(s_v2, 1) == 7);
-	assert(*(int*)s_v2->at(s_v2, 2) == 8);
-
-	int* s_v_sum = (int*)s_v->elements_sum(s_v);
-	int* s_v2_sum = (int*)s_v2->elements_sum(s_v2);
-
-	assert(*s_v2_sum == *s_v_sum);
-	assert(*s_v_sum == 21);
-
-	int* dot = v.dot(&v, &v2);
-	int* dot2 = v2.dot(&v2, &v);
-
-	assert(*dot == *dot2);
-	assert(*dot == 30);
-
-	int* sq_dot = (int*)v2.dot(&v2, &v2);
-	assert(*sq_dot == 14);
-
-	delete_alg_vector_ptr(s_v);
-	delete_alg_vector_ptr(s_v2);
-	free(s_v_sum);
-	free(s_v2_sum);
-	free(dot);
-	free(dot2);
-	free(sq_dot);
+	if (av == NULL)
+	{
+		avg_err.code = 3;
+		return NULL;
+	}
+	struct alg_vector* res = avgm.init(0, av->alg);
+	if (res == NULL)
+	{
+		avg_err.code = 2;
+		return NULL;
+	}
+	vgm.free(av->vec);
+	res->vec = vgm.copy(av->vec);
+	return res;
 }
-
-
-void test_alg_vector(void)
-{
-	test_element_sum_dot();
-}
-#else
-void test_alg_vector(void)
-{
-}
-#endif
-

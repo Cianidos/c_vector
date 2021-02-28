@@ -2,6 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "c_void_vector.h"
 
+struct void_vector_error_t void_vector_error = { .code = 0 };
+
 /*
  * private declaration section
  */

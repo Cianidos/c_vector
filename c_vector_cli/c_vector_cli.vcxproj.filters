@@ -15,24 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="c_vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="alg_vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="algebra.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="c_vector.c">
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alg_vector.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="algebra.c">
+    <ClCompile Include="tests.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

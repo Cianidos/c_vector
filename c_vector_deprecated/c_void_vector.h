@@ -15,9 +15,14 @@ struct void_vector
 	 * not for use
 	 */
 	size_t _element_size;
+
 	/*
 	 * private
 	 * not for use
+	 *
+	 * size of internal buffer
+	 * while size <= capacity
+	 *	no data reallocation
 	 */
 	size_t _capacity;
 
@@ -46,13 +51,13 @@ struct void_vector
 	void* (*push_back)(struct void_vector* const this);
 
 	/*
-	 *	if @new_size > size
+	 *	if @new_size > @this->capacity
 	 *		beforehand allocate memory for @new_size elements, to optimize reallocation
 	 *  else do nothing
 	 *
 	 *  pointers invalidation possible
 	 */
-	void (*reserve)(struct void_vector* const this, const size_t new_size);
+	void (*reserve)(struct void_vector* const this, const size_t new_capacity);
 
 	/*
 	 *	makes deep copy (new data made)
@@ -86,11 +91,23 @@ struct void_vector
  * public declaration section
  */
 
+struct void_vector_error_t
+{
+	int code;
+
+	/*
+	 *  code by default = 0 - OK
+	 */
+} extern void_vector_error;
+
 #define NEW_VECTOR_OF(NAME, TYPE, SIZE) struct void_vector NAME = init_void_vector((SIZE), sizeof(TYPE))
 #define NEW_VECTOR_PTR_OF(NAME, TYPE, SIZE) struct void_vector* NAME = init_void_vector_ptr((SIZE), sizeof(TYPE))
 
+
 struct void_vector init_void_vector(size_t size_of_vector, size_t size_of_one_element);
 struct void_vector* init_void_vector_ptr(size_t size_of_vector, size_t size_of_one_element);
+
+
 
 void delete_void_vector(struct void_vector vect);
 void delete_void_vector_ptr(struct void_vector* vect);
