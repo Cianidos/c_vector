@@ -12,17 +12,17 @@ struct algebraic_vector_global_manager
 	void		(*free)			(alg_vector* av);
 
 	int16_t		(*last_err)				(void);
-	const char* (*err_to_string)		(int16_t err);
-	const char* (*last_err_to_string)	(int16_t err);
+	const char*	(*err_to_string)		(int16_t err);
+	const char*	(*last_err_to_string)	(int16_t err);
 
 	size_t		(*dimension)	(const alg_vector* const av);
 	void*		(*at)			(const alg_vector* const av, size_t index);
 
-	void*		(*elements_sum) (const alg_vector* const av);
+	void*		(*elements_sum)	(const alg_vector* const av);
 	void*		(*dot)			(const alg_vector* const av, const alg_vector* const other);
-	alg_vector* (*sum)			(const alg_vector* const av, const alg_vector* const other);
+	alg_vector*	(*sum)			(const alg_vector* const av, const alg_vector* const other);
 
-	alg_vector* (*copy)			(const alg_vector* const av);
+	alg_vector*	(*copy)			(const alg_vector* const av);
 };
 
 extern struct algebraic_vector_global_manager avgm;
