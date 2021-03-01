@@ -12,14 +12,14 @@ int16_t		av_last_err				(void);
 const char*	av_err_to_string		(int16_t err);
 const char*	av_last_err_to_string	(int16_t err);
 
-size_t		av_dimension	(const alg_vector* const av);
-void*		av_at			(const alg_vector* const av, size_t index);
+size_t		av_dimension		(const alg_vector* const av);
+void*		av_at				(const alg_vector* const av, size_t index);
 
-void*		av_elements_sum	(const alg_vector* const av);
-void*		av_dot			(const alg_vector* const av, const alg_vector* const other);
-alg_vector*	av_sum			(const alg_vector* const av, const alg_vector* const other);
+void*		av_elements_sum		(const alg_vector* const av);
+void*		av_dot				(const alg_vector* const av, const alg_vector* const other);
+alg_vector*	av_sum				(const alg_vector* const av, const alg_vector* const other);
 
-alg_vector*	av_copy			(const alg_vector* const av);
+alg_vector*	av_copy				(const alg_vector* const av);
 
 
 struct algebraic_vector_global_manager avgm =
