@@ -72,7 +72,11 @@ alg_vector* av_init(size_t dimension, algebra* alg)
 
 void av_free(alg_vector* av)
 {
-
+	if(av == NULL)
+	{
+		avg_err.code = 3;
+		return;
+	}
 	vgm.free(av->vec);
 	av->alg = NULL;
 	free(av);
