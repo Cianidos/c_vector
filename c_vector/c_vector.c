@@ -8,56 +8,55 @@ c_vector*	v_init	(size_t size_of_vector, size_t size_of_element);
 void		v_free	(c_vector* v);
 
 int16_t		v_last_err				(void);
-const char* v_err_to_string		(int16_t err);
+const char* v_err_to_string			(int16_t err);
 const char* v_last_err_to_string	(int16_t err);
 
-c_vector* v_copy(const c_vector* const v);
+c_vector*	v_copy		(const c_vector* const v);
 
-size_t	v_size		(const c_vector* const v);
-bool	v_empty		(const c_vector* const v);
-
+size_t	v_size			(const c_vector* const v);
+bool	v_empty			(const c_vector* const v);
 
 void*	v_at			(c_vector* const v, size_t index);
-void*	v_push_back	(c_vector* const v);
-void	v_pop_back	(c_vector* const v);
+void*	v_push_back		(c_vector* const v);
+void	v_pop_back		(c_vector* const v);
 void	v_resize		(c_vector* const v, size_t new_size);
 void	v_reserve		(c_vector* const v, size_t new_capacity);
-void*	v_begin		(c_vector* const v);
+void*	v_begin			(c_vector* const v);
 void*	v_end			(c_vector* const v);
-const void* v_front(const c_vector* const v);
-const void* v_back(const c_vector* const v);
 
-const void* v_at_const(const c_vector* const v, size_t index);
+const void* v_front		(const c_vector* const v);
+const void* v_back		(const c_vector* const v);
+const void* v_at_const	(const c_vector* const v, size_t index);
 
 
 struct c_vector_global_manager vgm =
 {
-	.init = v_init,
-	.free = v_free,
-	.last_err = v_last_err,
-	.err_to_string = v_err_to_string,
+	.init				= v_init,
+	.free				= v_free,
+	.last_err			= v_last_err,
+	.err_to_string		= v_err_to_string,
 	.last_err_to_string = v_last_err_to_string,
-	.copy = v_copy,
-	.size = v_size,
-	.empty = v_empty,
-	.at = v_at,
-	.push_back = v_push_back,
-	.pop_back = v_pop_back,
-	.resize = v_resize,
-	.reserve = v_reserve,
-	.begin = v_begin,
-	.end = v_end,
-	.front = v_front,
-	.back = v_back,
-	.at_const = v_at_const,
+	.copy				= v_copy,
+	.size				= v_size,
+	.empty				= v_empty,
+	.at					= v_at,
+	.push_back			= v_push_back,
+	.pop_back			= v_pop_back,
+	.resize				= v_resize,
+	.reserve			= v_reserve,
+	.begin				= v_begin,
+	.end				= v_end,
+	.front				= v_front,
+	.back				= v_back,
+	.at_const			= v_at_const,
 };
 
 struct c_vector_global_error vg_err = { .code = 0 };
 
 
-int8_t* data_reallocation(c_vector* v, size_t size);
-void data_extend(c_vector* const v);
-void data_shrink(c_vector* const v);
+int8_t* data_reallocation	(c_vector* v, size_t size);
+void	data_extend			(c_vector* const v);
+void	data_shrink			(c_vector* const v);
 
 
 struct c_vector

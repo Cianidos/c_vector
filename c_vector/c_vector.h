@@ -15,7 +15,7 @@ struct c_vector_global_manager
 	const char* (*err_to_string)		(int16_t err);
 	const char* (*last_err_to_string)	(int16_t err);
 
-	c_vector* (*copy)(const c_vector* const v);
+	c_vector*	(*copy)	(const c_vector* const v);
 
 	size_t(*size)		(const c_vector* const v);
 	bool  (*empty)		(const c_vector* const v);

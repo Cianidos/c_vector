@@ -8,35 +8,35 @@
 alg_vector* av_init		(size_t dimension, algebra* alg);
 void		av_free		(alg_vector* av);
 
-int16_t		av_last_err			(void);
+int16_t		av_last_err				(void);
 const char* av_err_to_string		(int16_t err);
 const char* av_last_err_to_string	(int16_t err);
 
 size_t		av_dimension	(const alg_vector* const av);
 void*		av_at			(const alg_vector* const av, size_t index);
 
-void*		av_elements_sum(const alg_vector* const av);
+void*		av_elements_sum	(const alg_vector* const av);
 void*		av_dot			(const alg_vector* const av, const alg_vector* const other);
 alg_vector* av_sum			(const alg_vector* const av, const alg_vector* const other);
 
-alg_vector* av_copy		(const alg_vector* const av);
+alg_vector* av_copy			(const alg_vector* const av);
 
 
 struct algebraic_vector_global_manager avgm =
 {
-	.init = av_init,
-	.free = av_free,
+	.init				= av_init,
+	.free				= av_free,
 
-	.last_err = av_last_err,
-	.err_to_string = av_err_to_string,
+	.last_err			= av_last_err,
+	.err_to_string		= av_err_to_string,
 	.last_err_to_string = av_last_err_to_string,
 
-	.dimension = av_dimension,
-	.at = av_at,
-	.elements_sum = av_elements_sum,
-	.dot = av_dot ,
-	.sum = av_sum ,
-	.copy = av_copy,
+	.dimension			= av_dimension,
+	.at					= av_at,
+	.elements_sum		= av_elements_sum,
+	.dot				= av_dot ,
+	.sum				= av_sum ,
+	.copy				= av_copy,
 };
 
 struct algebraic_vector_global_error avg_err = { .code = 0 };
