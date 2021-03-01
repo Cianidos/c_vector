@@ -9,3 +9,7 @@ executeble project with tests for c_vector and console user interface
 
 ### c_vector_deprecated
 old project with trash and not useful code
+
+### about Linux
+Use this or something else to start on linux
+https://github.com/pavelliavonau/cmakeconverter
