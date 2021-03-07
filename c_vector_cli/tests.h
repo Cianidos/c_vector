@@ -9,6 +9,20 @@
 #define EXPECT_EQ(expression1, expression2) assert((expression1) ==  (expression2))
 #define EXPECT_FALSE(expression1) assert((expression1) == false)
 
+TEST(c_vector, init)
+{
+	c_vector* a = vgm.init( 20, sizeof(int));
+	EXPECT_EQ(vgm.size(a), 20);
+	EXPECT_FALSE(vgm.empty(a));
+
+	c_vector* b = vgm.copy(a);
+
+	EXPECT_EQ(vgm.size(b), 20);
+	EXPECT_FALSE(vgm.empty(b));
+
+	vgm.free(a);
+	vgm.free(b);
+}
 
 TEST(c_vector, at)
 {
@@ -34,21 +48,6 @@ TEST(c_vector, at)
 	EXPECT_EQ(vgm.at(b, 10), NULL);
 
 	vgm.free(v);
-	vgm.free(b);
-}
-
-TEST(c_vector, init)
-{
-	c_vector* a = vgm.init( 20, sizeof(int));
-	EXPECT_EQ(vgm.size(a), 20);
-	EXPECT_FALSE(vgm.empty(a));
-
-	c_vector* b = vgm.copy(a);
-
-	EXPECT_EQ(vgm.size(b), 20);
-	EXPECT_FALSE(vgm.empty(b));
-
-	vgm.free(a);
 	vgm.free(b);
 }
 

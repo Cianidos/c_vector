@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 #include "alg_vector.h"
 
 
@@ -63,6 +65,7 @@ alg_vector* av_init(size_t dimension, algebra* alg)
 	if (v == NULL)
 	{
 		avg_err.code = 2;
+		free(av);
 		return NULL;
 	}
 	av->vec = v;

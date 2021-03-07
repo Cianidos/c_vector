@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "c_vector.h"
 
 #include <stdlib.h>
@@ -29,7 +32,7 @@ const void* v_back		(const c_vector* const v);
 const void* v_at_const	(const c_vector* const v, size_t index);
 
 
-struct c_vector_global_manager vgm =
+const struct c_vector_global_manager vgm =
 {
 	.init				= v_init,
 	.free				= v_free,
@@ -83,6 +86,7 @@ c_vector* v_init(size_t size_of_vector, size_t size_of_element)
 	if (v->data == NULL)
 	{
 		vg_err.code = 2;
+		free(v);
 		return NULL;
 	}
 	return v;
@@ -253,7 +257,7 @@ void* v_end(c_vector* const v)
 		vg_err.code = 3;
 		return NULL;
 	}
-	return (int8_t*)v_at(v, v->size - 1) + v->element_size;
+	return (void *)((int8_t*)v_at(v, v->size - 1) + v->element_size);
 }
 
 const void* v_front(const c_vector* const v)

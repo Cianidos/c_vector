@@ -24,13 +24,17 @@ struct algebraic_vector_global_manager
 
 	alg_vector*	(*copy)			(const alg_vector* const av);
 };
-
 extern struct algebraic_vector_global_manager avgm;
 
+
+//	code 0 "No errors";
+//	code 1 "Out of range access";
+//	code 2 "Unsuccessful allocation of memory";
+//	code 3 "NULL alg_vector received";
 struct algebraic_vector_global_error 
 {
+	//  0 by default
 	int16_t code;
 };
-
 extern struct algebraic_vector_global_error avg_err;
 

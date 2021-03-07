@@ -32,10 +32,15 @@ struct c_vector_global_manager
 	const void* (*back)		(const c_vector* const v);
 	const void* (*at_const)	(const c_vector* const v, size_t index);
 };
-extern struct c_vector_global_manager vgm;
+extern const struct c_vector_global_manager vgm;
 
+//	code 0 "No errors";
+//	code 1 "Out of range access";
+//	code 2 "Unsuccessful allocation of memory";
+//	code 3 "NULL vector received";
 struct c_vector_global_error 
 {
+	//  0 by default
 	int16_t code;
 };
 
